@@ -1,23 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>FUE | Fantist Universe Events</title>
     <style>
-        body { background: black; color: #00ff00; font-family: monospace; padding: 20px; }
-        .box { border: 2px solid #00ff00; padding: 20px; box-shadow: 0 0 10px #00ff00; }
-        h1 { text-transform: uppercase; letter-spacing: 2px; }
-        .cursor { animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
+        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; padding: 20px; line-height: 1.2; }
+        #terminal { max-width: 900px; margin: auto; border: 1px solid #0f0; padding: 20px; height: 80vh; overflow-y: auto; box-shadow: 0 0 20px rgba(0,255,0,0.2); position: relative; }
+        .input-line { display: flex; align-items: center; margin-top: 10px; }
+        input { background: transparent; border: none; color: #0f0; font-family: inherit; font-size: inherit; outline: none; flex-grow: 1; margin-left: 10px; }
+        .header { text-align: center; border-bottom: 1px solid #0f0; margin-bottom: 20px; padding-bottom: 10px; }
+        .glitch { animation: scan 2s linear infinite; }
+        @keyframes scan { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        .cmd-output { margin: 10px 0; color: #00cc00; }
+        .highlight { color: #fff; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1>FUE PROTOCOL: ONLINE</h1>
-        <p>> ACCESSING FANTIST UNIVERSE EVENTS...</p>
-        <p>> STATUS: ENCRYPTION ACTIVE</p>
-        <p>> DATA: INCOGNITOS DETECTED</p>
-        <br>
-        <p>> WAITING FOR COMMANDS<span class="cursor">_</span></p>
+    <div id="terminal">
+        <div class="header">
+            <h1 class="glitch">FUE PROTOCOL: ONLINE</h1>
+            <p>FANTIST UNIVERSE EVENTS // ENCRYPTION v4.2</p>
+        </div>
+        <div id="history">
+            <div>> SYSTEM INITIALIZED.</div>
+            <div>> WELCOME, OPERATOR. TYPE <span class="highlight">'HELP'</span> TO BEGIN.</div>
+        </div>
+        <div class="input-line">
+            <span>></span>
+            <input type="text" id="commandInput" autofocus autocomplete="off">
+        </div>
     </div>
+
+    <script>
+        const input = document.getElementById('commandInput');
+        const history = document.getElementById('history');
+
+        const lore = {
+            "help": "AVAILABLE COMMANDS: <br> - <span class='highlight'>LORE</span>: ACCESS RECENT EVENTS<br> - <span class='highlight'>FACTIONS</span>: LIST ACTIVE GROUPS<br> - <span class='highlight'>LOGS</span>: VIEW RECENT SURVEILLANCE<br> - <span class='highlight'>CLEAR</span>: WIPE TERMINAL",
+            "factions": "ACTIVE FACTIONS DETECTED:<br>1. <span class='highlight'>INCOGNITOS</span>: LED BY CRIMSONZFLAME. EXTREMELY AGGRESSIVE.<br>2. <span class='highlight'>SEPHERIAN KINGDOM</span>: ANCIENT CIVILIZATION. RECENTLY REDISCOVERED.",
+            "lore": "LATEST EVENTS:<br>- <span class='highlight'>VALLEY BREACH</span>: ATTEMPTED INFILTRATION OF INCOGNITO VALLEY VIA 2X2 ENTRANCE.<br>- <span class='highlight'>THE LONG MARCH</span>: SMILYCRIT REACHED THE 1,000,000 BLOCK COORDINATES.<br>- <span class='highlight'>THE FINAL BOOK</span>: OWNERSHIP OF SEPHERIA HAS BEEN SECURED.",
+            "logs": "SURVEILLANCE LOGS:<br>[!] CRIMSONZFLAME ISSUED NEW PROTOCOLS FOR INCOGNITOS.<br>[!] WEALTH ESTIMATES: SEPHERIAN VAULTS CONTAIN THOUSANDS OF DIAMONDS.<br>[!] WARNING: MISSION FAILURE RESULTS IN IMMEDIATE DEMOTION.",
+        };
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = input.value.toLowerCase().trim();
+                const newLine = document.createElement('div');
+                newLine.className = 'cmd-output';
+                
+                if (cmd === 'clear') {
+                    history.innerHTML = '';
+                } else if (lore[cmd]) {
+                    newLine.innerHTML = `<span class='highlight'>> ${cmd.toUpperCase()}</span><br>${lore[cmd]}`;
+                    history.appendChild(newLine);
+                } else if (cmd !== "") {
+                    newLine.innerHTML = `> ${cmd}: COMMAND NOT RECOGNIZED.`;
+                    history.appendChild(newLine);
+                }
+
+                input.value = '';
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        });
+    </script>
 </body>
 </html>
